@@ -56,7 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KeystoneBindings\Keystone.Net.csproj">
+    <ProjectReference Include="..\Keystone.Net\Keystone.Net.csproj">
       <Project>{2FE3B804-90F7-4632-B6F4-F72548E26984}</Project>
       <Name>Keystone.Net</Name>
     </ProjectReference>
