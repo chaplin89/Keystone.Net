@@ -9,18 +9,15 @@ namespace KeystoneBindingsTests
     public class KeystoneBindingsTests
     {
         [TestMethod]
-        public unsafe void TestVersion()
+        public unsafe void TestNOP()
         {
-            uint major = 0;
-            uint minor = 0;
-            KeystoneImports.Version(ref major, ref minor);
-            IntPtr engine = IntPtr.Zero;
-            IntPtr encoding = IntPtr.Zero;
-            bool isSupported = KeystoneImports.IsArchitectureSupported(KeystoneArchitecture.KS_ARCH_X86);
-
-            KeystoneImports.Open(KeystoneArchitecture.KS_ARCH_X86, (int)(KeystoneMode.KS_MODE_32 | KeystoneMode.KS_MODE_LITTLE_ENDIAN), &engine);
-
-            KeystoneImports.Assemble(engine, "inc eax;", 0, &encoding, ref major, ref minor);
+            using (var keystone = new Keystone.Keystone(KeystoneArchitecture.KS_ARCH_X86, KeystoneMode.KS_MODE_32))
+            {
+                using (var encoded = keystone.Assemble("nop;", 0))
+                {
+                    byte[] result = encoded.ToByteArray();
+                }
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Keystone
     {
         IntPtr engine = IntPtr.Zero;
 
-        public void Open(KeystoneArchitecture architecture, KeystoneMode mode)
+        public Keystone(KeystoneArchitecture architecture, KeystoneMode mode)
         {
             var result = KeystoneImports.Open(architecture, (int)mode, ref engine);
             if (result != KeystoneError.KS_ERR_OK)
