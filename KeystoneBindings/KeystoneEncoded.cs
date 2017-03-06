@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KeystoneBindings
+namespace Keystone
 {
     public unsafe class KeystoneEncoded : IDisposable
     {

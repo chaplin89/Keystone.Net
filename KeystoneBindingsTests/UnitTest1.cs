@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using KeystoneBindings;
+using Keystone;
 using System.Text;
 
 namespace KeystoneBindingsTests

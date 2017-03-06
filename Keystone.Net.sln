@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeystoneBindings", "KeystoneBindings\KeystoneBindings.csproj", "{2FE3B804-90F7-4632-B6F4-F72548E26984}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keystone.Net", "KeystoneBindings\Keystone.Net.csproj", "{2FE3B804-90F7-4632-B6F4-F72548E26984}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeystoneBindingsTests", "KeystoneBindingsTests\KeystoneBindingsTests.csproj", "{B9B98FF9-CA76-4DDA-868C-04E8EB151465}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keystone.NetTests", "KeystoneBindingsTests\Keystone.NetTests.csproj", "{B9B98FF9-CA76-4DDA-868C-04E8EB151465}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
