@@ -11,9 +11,9 @@ namespace KeystoneBindingsTests
         [TestMethod]
         public unsafe void TestNOP()
         {
-            using (var keystone = new Keystone.Keystone(KeystoneArchitecture.KS_ARCH_X86, KeystoneMode.KS_MODE_32))
+            using (var keystone = new Keystone.Keystone(KeystoneArchitecture.KS_ARCH_HEXAGON, KeystoneMode.KS_MODE_32))
             {
-                using (var encoded = keystone.Assemble("nop;", 0))
+                using (var encoded = keystone.Assemble("nop; mov eax, eax", 0))
                 {
                     byte[] result = encoded.ToByteArray();
                 }

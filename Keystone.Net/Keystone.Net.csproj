@@ -41,6 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchitectureErrors\ARM.cs" />
+    <Compile Include="ArchitectureErrors\ARM64.cs" />
+    <Compile Include="ArchitectureErrors\Heaxgon.cs" />
+    <Compile Include="ArchitectureErrors\MIPS.cs" />
+    <Compile Include="ArchitectureErrors\PPC.cs" />
+    <Compile Include="ArchitectureErrors\SPARC.cs" />
+    <Compile Include="ArchitectureErrors\SystemZ.cs" />
+    <Compile Include="ArchitectureErrors\X86.cs" />
     <Compile Include="Keystone.cs" />
     <Compile Include="KeystoneEncoded.cs" />
     <Compile Include="KeystoneImports.cs" />

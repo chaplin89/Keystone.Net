@@ -22,8 +22,7 @@ namespace Keystone
         public extern unsafe static void Free(IntPtr buffer);
 
         [DllImport("keystone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ks_strerror")]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string ErrorToString(KeystoneError code);
+        public extern static unsafe char* ErrorToString(KeystoneError code);
         
         [DllImport("keystone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ks_errno")]
         public extern static KeystoneError GetLastKeystoneError(IntPtr ks);
