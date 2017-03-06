@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace KeystoneBindings
 {
-    public class Class1
+    public enum OptionType
     {
+        KS_OPT_SYNTAX = 1,
     }
 }
