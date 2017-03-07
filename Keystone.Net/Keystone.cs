@@ -14,7 +14,7 @@ namespace Keystone
                 throw new InvalidOperationException($"Error while initializing keystone: {ErrorToString(result)}");
         }
 
-        public void SetOption(IntPtr ks, OptionType type, uint value)
+        public void SetOption(OptionType type, uint value)
         {
             var result = KeystoneImports.SetOption(engine, type, value);
             if (result != KeystoneError.KS_ERR_OK)
