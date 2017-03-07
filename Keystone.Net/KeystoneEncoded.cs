@@ -7,40 +7,15 @@ using System.Threading.Tasks;
 
 namespace Keystone
 {
-    public unsafe class KeystoneEncoded : IDisposable
+    public unsafe class KeystoneEncoded
     {
-        private IntPtr buffer;
-
-        public KeystoneEncoded(IntPtr buffer, uint size, uint statementCount)
+        public KeystoneEncoded(byte[] buffer, uint statementCount)
         {
-            Buffer = (byte*)buffer;
-            Size = size;
+            Buffer = buffer;
             StatementCount = statementCount;
         }
-
-        public uint Size { get; private set; }
-        public byte* Buffer { get; private set; }
+        
+        public byte[] Buffer { get; private set; }
         public uint StatementCount { get; private set; }
-
-        public byte[] ToByteArray()
-        {
-            if (Size != 0)
-            {
-                byte[] returnValue = new byte[Size];
-                Marshal.Copy((IntPtr)Buffer, returnValue, 0, (int)Size);
-                return returnValue;
-            }
-            return null;
-        }
-
-        public void Dispose()
-        {
-            if (buffer != null)
-                KeystoneImports.Free(buffer);
-
-            buffer = IntPtr.Zero;
-            Size = 0;
-            StatementCount = 0;
-        }
     }
 }

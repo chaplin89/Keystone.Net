@@ -37,6 +37,7 @@ namespace Keystone
             IntPtr encoding;
             uint size;
             uint statementCount;
+            byte[] buffer;
 
             int result = KeystoneImports.Assemble(engine,
                 toEncode,
@@ -48,7 +49,16 @@ namespace Keystone
             if (result != 0)
                 throw new InvalidOperationException($"Error while assembling {toEncode}: {ErrorToString(GetLastKeystoneError())}");
 
-            return new KeystoneEncoded(encoding, size, statementCount);
+            buffer = new byte[size];
+
+            unsafe
+            { 
+                byte* ptrBuffer = (byte*)encoding;
+                Marshal.Copy(encoding, buffer, 0, (int)size);
+                KeystoneImports.Free(encoding);
+            }
+
+            return new KeystoneEncoded(buffer, statementCount);
         }
 
         public KeystoneError GetLastKeystoneError()

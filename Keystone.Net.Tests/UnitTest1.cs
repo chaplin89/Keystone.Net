@@ -13,10 +13,8 @@ namespace KeystoneBindingsTests
         {
             using (var keystone = new Keystone.Keystone(KeystoneArchitecture.KS_ARCH_HEXAGON, KeystoneMode.KS_MODE_32))
             {
-                using (var encoded = keystone.Assemble("nop; mov eax, eax", 0))
-                {
-                    byte[] result = encoded.ToByteArray();
-                }
+                var encoded = keystone.Assemble("nop; mov eax, eax", 0);
+
             }
         }
     }
