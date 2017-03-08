@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -10,6 +11,9 @@ namespace Keystone
     public class Keystone : IDisposable
     {
         IntPtr engine = IntPtr.Zero;
+        bool throwIfError;
+
+        public delegate bool Resolver(string symbol, ref ulong value);
 
         /// <summary>
         /// Construct the object with a given architecture and a given mode.
@@ -23,10 +27,10 @@ namespace Keystone
         /// </remarks>
         public Keystone(KeystoneArchitecture architecture, KeystoneMode mode, bool throwIfError = true)
         {
+            this.throwIfError = throwIfError;
+
             var result = KeystoneImports.Open(architecture, (int)mode, ref engine);
-            if (result != KeystoneError.KS_ERR_OK)
-
-
+            if (result != KeystoneError.KS_ERR_OK && throwIfError)
                 throw new InvalidOperationException($"Error while initializing keystone: {ErrorToString(result)}");
         }
 
@@ -38,15 +42,15 @@ namespace Keystone
         public void SetOption(OptionType type, uint value)
         {
             var result = KeystoneImports.SetOption(engine, type, value);
-            if (result != KeystoneError.KS_ERR_OK)
+            if (result != KeystoneError.KS_ERR_OK && throwIfError)
                 throw new InvalidOperationException($"Error while setting option in keystone: {ErrorToString(result)}");
         }
 
         /// <summary>
-        /// 
+        /// Return a string associated with a given error code.
         /// </summary>
-        /// <param name="result"></param>
-        /// <returns></returns>
+        /// <param name="result">Error code</param>
+        /// <returns>The string</returns>
         public static string ErrorToString(KeystoneError result)
         {
             IntPtr error = KeystoneImports.ErrorToString(result);
@@ -56,10 +60,10 @@ namespace Keystone
         }
 
         /// <summary>
-        /// 
+        /// Encode given statements.
         /// </summary>
-        /// <param name="toEncode"></param>
-        /// <param name="address"></param>
+        /// <param name="toEncode">String that contains the statements to encode</param>
+        /// <param name="address">Address of the first instruction.</param>
         /// <returns></returns>
         public KeystoneEncoded Assemble(string toEncode, ulong address)
         {
@@ -68,34 +72,94 @@ namespace Keystone
             uint statementCount;
             byte[] buffer;
 
-            int result = KeystoneImports.Assemble(engine, 
-                                                  toEncode, 
-                                                  address, 
-                                                  out encoding, 
-                                                  out size, 
+            int result = KeystoneImports.Assemble(engine,
+                                                  toEncode,
+                                                  address,
+                                                  out encoding,
+                                                  out size,
                                                   out statementCount);
 
             if (result != 0)
-                throw new InvalidOperationException($"Error while assembling {toEncode}: {ErrorToString(GetLastKeystoneError())}");
+            {
+                if (throwIfError)
+                    throw new InvalidOperationException($"Error while assembling {toEncode}: {ErrorToString(GetLastKeystoneError())}");
+                return null;
+            }
 
             buffer = new byte[size];
 
-            unsafe
-            {
-                byte* ptrBuffer = (byte*)encoding;
-                Marshal.Copy(encoding, buffer, 0, (int)size);
-            }
-
+            Marshal.Copy(encoding, buffer, 0, (int)size);
             KeystoneImports.Free(encoding);
+
             return new KeystoneEncoded(buffer, statementCount);
+        }
+
+        /// <summary>
+        /// Append the result of an assemble to an existing collection of bytes.
+        /// </summary>
+        /// <param name="toEncode"></param>
+        /// <param name="encoded"></param>
+        /// <param name="address"></param>
+        /// <param name="size"></param>
+        /// <param name="statements"></param>
+        /// <returns></returns>
+        public bool AppendAssemble(string toEncode, ICollection<byte> encoded, ulong address, out int size, out uint statements)
+        {
+            if (encoded == null)
+                throw new ArgumentNullException("encoded");
+            if (toEncode == null)
+                throw new ArgumentNullException("toEncode");
+            if (encoded.IsReadOnly)
+                throw new ArgumentException("encoded can't be read-only.");
+
+            var result = Assemble(toEncode, address);
+
+            if (result != null)
+            {
+                foreach (var v in result.Buffer)
+                    encoded.Add(v);
+
+                size = result.Buffer.Length;
+                statements = result.StatementCount;
+                return true;
+            }
+            else
+            {
+                size = 0;
+                statements = 0;
+                return false;
+            }
+        }
+
+
+        public bool AppendAssemble(string toEncode, ICollection<byte> encoded, ulong address, out int size)
+        {
+            uint unused;
+            return AppendAssemble(toEncode, encoded, address, out size, out unused);
+        }
+
+        public bool AppendAssemble(string toEncode, ICollection<byte> encoded, ulong address)
+        {
+            uint unused1;
+            int unused2;
+
+            return AppendAssemble(toEncode, encoded, address, out unused2, out unused1);
+        }
+
+        public bool AppendAssemble(string toEncode, ICollection<byte> encoded)
+        {
+            uint unused1;
+            int unused2;
+
+            return AppendAssemble(toEncode, encoded, 0, out unused2, out unused1);
         }
 
         /// <summary>
         /// Get the last error for this instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Last error</returns>
         /// <remarks>
-        /// 
+        /// Might not retain its old error once accessed.
         /// </remarks>
         public KeystoneError GetLastKeystoneError()
         {
@@ -115,14 +179,14 @@ namespace Keystone
         /// <summary>
         /// Get the version of the engine.
         /// </summary>
-        /// <param name="major"></param>
-        /// <param name="minor"></param>
-        /// <returns></returns>
+        /// <param name="major">Major</param>
+        /// <param name="minor">Minor</param>
+        /// <returns>Unique identifier for this version.</returns>
         public static uint GetKeystoneVersion(ref uint major, ref uint minor)
         {
             return KeystoneImports.Version(ref major, ref minor);
         }
-        
+
         /// <summary>
         /// Release the engine.
         /// </summary>
