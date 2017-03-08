@@ -1,6 +1,6 @@
 ﻿namespace KeystoneBindings.ArchitectureErrors
 {
-    class SystemZ
+    public enum SystemZ
     {
     }
 }

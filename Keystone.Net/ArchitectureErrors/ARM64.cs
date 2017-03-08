@@ -1,6 +1,6 @@
 ﻿namespace KeystoneBindings.ArchitectureErrors
 {
-    class ARM64
+    public enum ARM64
     {
     }
 }

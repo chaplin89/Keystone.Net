@@ -1,6 +1,6 @@
 ﻿namespace KeystoneBindings.ArchitectureErrors
 {
-    class X86
+    public enum X86
     {
     }
 }

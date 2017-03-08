@@ -1,6 +1,6 @@
 ﻿namespace KeystoneBindings.ArchitectureErrors
 {
-    class MIPS
+    public enum MIPS
     {
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace KeystoneBindings.ArchitectureErrors
 {
-    class Heaxgon
+    public enum Heaxgon
     {
     }
 }

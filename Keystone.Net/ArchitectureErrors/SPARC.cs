@@ -1,6 +1,6 @@
 ﻿namespace KeystoneBindings.ArchitectureErrors
 {
-    class SPARC
+    public enum SPARC
     {
     }
 }

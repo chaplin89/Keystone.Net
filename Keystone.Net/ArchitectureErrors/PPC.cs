@@ -1,6 +1,6 @@
 ﻿namespace KeystoneBindings.ArchitectureErrors
 {
-    class PPC
+    public enum PPC
     {
     }
 }
