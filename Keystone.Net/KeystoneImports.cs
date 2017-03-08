@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace Keystone
@@ -8,6 +9,28 @@ namespace Keystone
     /// </summary>
     internal class KeystoneImports
     {
+        /// <summary>
+        /// Taken from: http://stackoverflow.com/questions/10852634/using-a-32bit-or-64bit-dll-in-c-sharp-dllimport
+        /// </summary>
+        static KeystoneImports()
+        {
+            var myPath = new Uri(typeof(KeystoneImports).Assembly.CodeBase).LocalPath;
+            var myFolder = Path.GetDirectoryName(myPath);
+
+            var is64 = IntPtr.Size == 8;
+            var subfolder = is64 ? "\\win64\\" : "\\win32\\";
+
+            string dllPosition = myFolder + subfolder + "keystone.dll";
+
+            // If this file exist, load it. 
+            // Otherwise let the marshaller load the appropriate file.
+            if (File.Exists(dllPosition))
+                LoadLibrary(dllPosition);
+        }
+
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr LoadLibrary(string dllToLoad);
+        
         [DllImport("keystone.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ks_version" )]
         internal extern static uint Version(ref uint major, ref uint minor);
         
