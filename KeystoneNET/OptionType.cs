@@ -1,4 +1,4 @@
-﻿namespace Keystone
+﻿namespace KeystoneNET
 {
     public enum OptionType
     {

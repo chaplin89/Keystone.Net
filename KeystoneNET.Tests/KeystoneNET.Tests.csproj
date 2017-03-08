@@ -6,8 +6,8 @@
     <ProjectGuid>{B9B98FF9-CA76-4DDA-868C-04E8EB151465}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KeystoneBindingsTests</RootNamespace>
-    <AssemblyName>KeystoneBindingsTests</AssemblyName>
+    <RootNamespace>KeystoneNET.Tests</RootNamespace>
+    <AssemblyName>KeystoneNET.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -66,13 +66,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Compilation.feature</DependentUpon>
     </Compile>
-    <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Keystone.Net\Keystone.Net.csproj">
+    <ProjectReference Include="..\KeystoneNET\KeystoneNET.csproj">
       <Project>{2FE3B804-90F7-4632-B6F4-F72548E26984}</Project>
-      <Name>Keystone.Net</Name>
+      <Name>KeystoneNET</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

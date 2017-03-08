@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace KeystoneBindingsTests
+namespace KeystoneNET.Tests
 {
     using TechTalk.SpecFlow;
     
@@ -79,7 +79,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 7
  testRunner.When("I compile the statement with Keystone", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 8
- testRunner.Then("the result is 0x90", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the result is 90", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -100,7 +100,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 14
  testRunner.When("I compile the statement with Keystone", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 15
- testRunner.Then("The last error is EXPR_TOKEN", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("The last error is ASM_MNEMONICFAIL", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

@@ -1,4 +1,4 @@
-﻿namespace Keystone
+﻿namespace KeystoneNET
 {
     /// <summary>
     /// Wrap the result of an assemble.

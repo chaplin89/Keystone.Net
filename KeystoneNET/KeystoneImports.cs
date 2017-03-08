@@ -2,7 +2,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace Keystone
+namespace KeystoneNET
 {
     /// <summary>
     /// Imports for keystone.dll

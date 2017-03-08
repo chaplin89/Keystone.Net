@@ -7,8 +7,8 @@
     <ProjectGuid>{2FE3B804-90F7-4632-B6F4-F72548E26984}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KeystoneBindings</RootNamespace>
-    <AssemblyName>KeystoneBindings</AssemblyName>
+    <RootNamespace>KeystoneNET</RootNamespace>
+    <AssemblyName>KeystoneNET</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
