@@ -19,13 +19,13 @@ namespace KeystoneNET.Tests
             ScenarioContext.Current.Add("keystoneInstance", keystone);
         }
 
-        [Given(@"The statements ""(.*)""")]
+        [Given(@"The statement\(s\) ""(.*)""")]
         public void GivenTheStatements(string p0)
         {
             ScenarioContext.Current.Add("statements", p0);
         }
 
-        [When(@"I compile the statement with Keystone")]
+        [When(@"I compile the statement\(s\) with Keystone")]
         public void WhenICompileTheStatementWithKeystone()
         {
             var statements = ScenarioContext.Current["statements"] as string;
@@ -35,6 +35,19 @@ namespace KeystoneNET.Tests
             ScenarioContext.Current.Add("assembleResult", result);
         }
 
+        [Given(@"The symbols resolver ""(.*)""")]
+        public void GivenTheSymbolsResolver(string p0)
+        {
+            var engine = ScenarioContext.Current["keystoneInstance"] as Keystone;
+
+            engine.ResolveSymbol += (string s, ref ulong w) =>
+            {
+                return true;
+            };
+
+        }
+
+
         [Then(@"the result is (.*)")]
         public void ThenTheResultIs(string p0)
         {
@@ -43,6 +56,9 @@ namespace KeystoneNET.Tests
                                      .ToList();
 
             var result = ScenarioContext.Current["assembleResult"] as KeystoneEncoded;
+            var engine = ScenarioContext.Current["keystoneInstance"] as Keystone;
+
+            Assert.AreEqual(engine.GetLastKeystoneError(), KeystoneError.KS_ERR_OK);
             Assert.AreEqual(result.Buffer.Length, expectedBytes.Count);
 
             for(int i=0; i< expectedBytes.Count; i++)

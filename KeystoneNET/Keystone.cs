@@ -13,7 +13,42 @@ namespace KeystoneNET
         IntPtr engine = IntPtr.Zero;
         bool throwOnError;
 
+        Resolver internalImpl;
+        List<Resolver> resolvers = new List<Resolver>();
+
+        bool addedResolveSymbol;
         public delegate bool Resolver(string symbol, ref ulong value);
+
+        public event Resolver ResolveSymbol
+        {
+            add
+            {
+                resolvers.Add(value);
+                if (!addedResolveSymbol)
+                { 
+                    KeystoneImports.SetOption(engine, OptionType.KS_OPT_SYM_RESOLVER, Marshal.GetFunctionPointerForDelegate(internalImpl));
+                    var res = KeystoneImports.GetLastKeystoneError(engine);
+
+                    addedResolveSymbol = true;
+                }
+            }
+            remove
+            {
+                resolvers.Remove(value);
+            }
+        }
+        
+
+        private bool SymbolResolver(string symbol, ref ulong value)
+        {
+            foreach (var item in resolvers)
+            {
+                bool result = item(symbol, ref value);
+                if (result)
+                    return true;
+            }
+            return false;
+        }
 
         /// <summary>
         /// Construct the object with a given architecture and a given mode.
@@ -27,6 +62,9 @@ namespace KeystoneNET
         /// </remarks>
         public Keystone(KeystoneArchitecture architecture, KeystoneMode mode, bool throwOnKeystoneError = true)
         {
+            internalImpl = this.SymbolResolver;
+            ulong i = 0;
+            internalImpl("", ref i);
             throwOnError = throwOnKeystoneError;
             var result = KeystoneImports.Open(architecture, (int)mode, ref engine);
 
@@ -43,7 +81,7 @@ namespace KeystoneNET
         /// <exception cref="InvalidOperationException">If Keystone return an error && throwOnError is true</exception>
         public bool SetOption(OptionType type, uint value)
         {
-            var result = KeystoneImports.SetOption(engine, type, value);
+            var result = KeystoneImports.SetOption(engine, type, (IntPtr)value);
 
             if (result != KeystoneError.KS_ERR_OK)
             {
@@ -54,7 +92,7 @@ namespace KeystoneNET
 
             return true;
         }
-
+        
         /// <summary>
         /// Return a string associated with a given error code.
         /// </summary>
@@ -123,7 +161,7 @@ namespace KeystoneNET
             if (toEncode == null)
                 throw new ArgumentNullException("toEncode");
             if (encoded.IsReadOnly)
-                throw new ArgumentException("encoded can't be read-only.");
+                throw new ArgumentException("encoded collection can't be read-only.");
 
             var result = Assemble(toEncode, address);
 
