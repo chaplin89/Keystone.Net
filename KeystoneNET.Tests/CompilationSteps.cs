@@ -35,15 +35,16 @@ namespace KeystoneNET.Tests
             ScenarioContext.Current.Add("assembleResult", result);
         }
 
-        [Given(@"The symbols resolver ""(.*)""")]
-        public void GivenTheSymbolsResolver(string p0)
+        [Given(@"A dummy symbols resolver")]
+        public void GivenADummySymbolsResolver()
         {
             var engine = ScenarioContext.Current["keystoneInstance"] as Keystone;
 
-            engine.ResolveSymbol += (string s, ref ulong w) =>
+            engine.ResolveSymbol += (string symbol, ref ulong address) =>
             {
+                address = 0xababab;
                 return true;
-            };
+            };            
         }
 
 

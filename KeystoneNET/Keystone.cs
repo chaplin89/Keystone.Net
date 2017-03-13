@@ -10,14 +10,17 @@ namespace KeystoneNET
     /// </summary>
     public class Keystone : IDisposable
     {
+        public delegate bool Resolver(string symbol, ref ulong value);
+
         IntPtr engine = IntPtr.Zero;
         bool throwOnError;
+        bool addedResolveSymbol;
 
-        Resolver internalImpl;
+        ResolverInternal internalImpl;
         List<Resolver> resolvers = new List<Resolver>();
 
-        bool addedResolveSymbol;
-        public delegate bool Resolver(string symbol, ref ulong value);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        delegate bool ResolverInternal(IntPtr symbol, ref ulong value);
 
         public event Resolver ResolveSymbol
         {
@@ -25,22 +28,26 @@ namespace KeystoneNET
             {
                 resolvers.Add(value);
                 if (!addedResolveSymbol)
-                { 
+                {
                     KeystoneImports.SetOption(engine, OptionType.KS_OPT_SYM_RESOLVER, Marshal.GetFunctionPointerForDelegate(internalImpl));
-                    var res = KeystoneImports.GetLastKeystoneError(engine);
-
                     addedResolveSymbol = true;
                 }
             }
             remove
             {
                 resolvers.Remove(value);
+                if (addedResolveSymbol && resolvers.Count == 0)
+                {
+                    KeystoneImports.SetOption(engine, OptionType.KS_OPT_SYM_RESOLVER, IntPtr.Zero);
+                    addedResolveSymbol = false;
+                }
             }
         }
-        
 
-        private bool SymbolResolver(string symbol, ref ulong value)
+
+        public bool SymbolResolver(IntPtr symbolPtr, ref ulong value)
         {
+            string symbol = Marshal.PtrToStringAnsi(symbolPtr);
             foreach (var item in resolvers)
             {
                 bool result = item(symbol, ref value);
@@ -62,7 +69,7 @@ namespace KeystoneNET
         /// </remarks>
         public Keystone(KeystoneArchitecture architecture, KeystoneMode mode, bool throwOnKeystoneError = true)
         {
-            internalImpl = this.SymbolResolver;
+            internalImpl = SymbolResolver;
             throwOnError = throwOnKeystoneError;
             var result = KeystoneImports.Open(architecture, (int)mode, ref engine);
 
@@ -90,7 +97,7 @@ namespace KeystoneNET
 
             return true;
         }
-        
+
         /// <summary>
         /// Return a string associated with a given error code.
         /// </summary>
