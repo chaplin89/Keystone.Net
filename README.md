@@ -9,7 +9,6 @@
     ulong address = 0;
     KeystoneEncoded enc = keystone.Assemble("xor eax, eax; jmp _j1", address);
     
-    // Currently symbol resolving is not working
     engine.ResolveSymbol += (string s, ref ulong w) =>
     {
       if (s == "_j1")
