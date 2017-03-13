@@ -63,8 +63,6 @@ namespace KeystoneNET
         public Keystone(KeystoneArchitecture architecture, KeystoneMode mode, bool throwOnKeystoneError = true)
         {
             internalImpl = this.SymbolResolver;
-            ulong i = 0;
-            internalImpl("", ref i);
             throwOnError = throwOnKeystoneError;
             var result = KeystoneImports.Open(architecture, (int)mode, ref engine);
 

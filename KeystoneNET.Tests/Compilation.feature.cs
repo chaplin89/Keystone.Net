@@ -113,7 +113,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 17
  testRunner.And("The symbols resolver \"Standard\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 18
- testRunner.And("The statement(s) \"jmp _l1; nop;\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("The statement(s) \"jmp _l;\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 19
  testRunner.When("I compile the statement(s) with Keystone", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 20

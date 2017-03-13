@@ -44,7 +44,6 @@ namespace KeystoneNET.Tests
             {
                 return true;
             };
-
         }
 
 
@@ -58,8 +57,8 @@ namespace KeystoneNET.Tests
             var result = ScenarioContext.Current["assembleResult"] as KeystoneEncoded;
             var engine = ScenarioContext.Current["keystoneInstance"] as Keystone;
 
-            Assert.AreEqual(engine.GetLastKeystoneError(), KeystoneError.KS_ERR_OK);
-            Assert.AreEqual(result.Buffer.Length, expectedBytes.Count);
+            Assert.AreEqual(KeystoneError.KS_ERR_OK, engine.GetLastKeystoneError());
+            Assert.AreEqual(expectedBytes.Count, result.Buffer.Length);
 
             for(int i=0; i< expectedBytes.Count; i++)
                 Assert.AreEqual(result.Buffer[i], expectedBytes[i]);
