@@ -29,7 +29,7 @@ namespace KeystoneNET
                 resolvers.Add(value);
                 if (!addedResolveSymbol)
                 {
-                    KeystoneImports.SetOption(engine, OptionType.KS_OPT_SYM_RESOLVER, Marshal.GetFunctionPointerForDelegate(internalImpl));
+                    KeystoneImports.SetOption(engine, KeystoneOptionType.KS_OPT_SYM_RESOLVER, Marshal.GetFunctionPointerForDelegate(internalImpl));
                     addedResolveSymbol = true;
                 }
             }
@@ -38,7 +38,7 @@ namespace KeystoneNET
                 resolvers.Remove(value);
                 if (addedResolveSymbol && resolvers.Count == 0)
                 {
-                    KeystoneImports.SetOption(engine, OptionType.KS_OPT_SYM_RESOLVER, IntPtr.Zero);
+                    KeystoneImports.SetOption(engine, KeystoneOptionType.KS_OPT_SYM_RESOLVER, IntPtr.Zero);
                     addedResolveSymbol = false;
                 }
             }
@@ -84,7 +84,7 @@ namespace KeystoneNET
         /// <param name="value">Value</param>
         /// <returns>True is the option is correctly setted, False otherwise && throwOnError is false.</returns>
         /// <exception cref="InvalidOperationException">If Keystone return an error && throwOnError is true</exception>
-        public bool SetOption(OptionType type, uint value)
+        public bool SetOption(KeystoneOptionType type, uint value)
         {
             var result = KeystoneImports.SetOption(engine, type, (IntPtr)value);
 
